@@ -16,7 +16,9 @@ export function ConnectWalletButton() {
 
   const handleConnectWallet = async () => {
     if (isConnected) {
-      await disconnect();
+      await open({
+        view:"Account"
+      });
     } else {
       await open();
     }
