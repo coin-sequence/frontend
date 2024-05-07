@@ -10,6 +10,7 @@ import clsx from "clsx";
 
 export function AppNavbar() {
   const pathname = usePathname();
+  console.log(pathname,pathname.includes("deposit"));
   return (
     <header className="flex w-full shrink-0 items-center px-4 md:px-6 mt-10 lg:mt-0">
       <Sheet>
@@ -45,16 +46,16 @@ export function AppNavbar() {
       </Link>
       <nav className="ml-auto hidden lg:flex gap-16 items-center ">
         <Link
-          className={clsx("text-slate-50 no-underline hover:text-[#30B7DF] font-bold", {
-            "text-[#30B7DF]": pathname === "/app",
+          className={clsx("text-slate-50 no-underline hover:text-cyan-600 font-bold", {
+            "text-cyan-600": pathname === "/app",
           })}
           href="/app"
         >
           Indexes
         </Link>
         <Link
-          className={clsx("text-slate-50 no-underline hover:text-[#30B7DF] font-bold", {
-            "text-[#30B7DF]": pathname.includes("deposit"),
+          className={clsx("text-slate-50 no-underline hover:text-cyan-600 font-bold", {
+            "text-cyan-600": pathname === "/app/deposit",
           })}
           href="/app/deposit"
         >
@@ -115,16 +116,16 @@ export function HomeNavbar() {
       </Link>
       <nav className="ml-auto hidden lg:flex gap-16 items-center ">
         <Link
-          className={clsx("text-slate-50 no-underline hover:text-[#30B7DF] font-bold", {
-            "text-[#30B7DF]": pathname === "/home",
+          className={clsx("text-slate-50 no-underline hover:text-cyan-600 font-bold", {
+            "text-cyan-600": pathname === "/home",
           })}
           href="#"
         >
           Home
         </Link>
         <Link
-          className={clsx("text-slate-50 no-underline hover:text-[#30B7DF]", {
-            "text-[#30B7DF]": pathname === "/resources",
+          className={clsx("text-slate-50 no-underline hover:text-cyan-600", {
+            "text-cyan-600": pathname === "/resources",
           })}
           href="#"
         >
