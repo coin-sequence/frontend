@@ -114,4 +114,12 @@ export const marqueeElements = [
     change2: "-",
     changeType: "none",
   },
+  {
+    title: "PolyPulse 10",
+    image: "/polygon.png",
+    price: "$9.98",
+    change1: 1.14,
+    change2: 9.01,
+    changeType: "up",
+  },
 ];

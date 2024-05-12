@@ -44,10 +44,10 @@ export function AppNavbar() {
           </div>
         </SheetContent>
       </Sheet>
-      <Link className="mr-6 hidden lg:flex" href="#">
-        <MountainIcon className="h-32 w-32 flex" />
+      <Link className="hidden lg:flex" href="#">
+        <MountainIcon className="h-28 w-28 flex" />
       </Link>
-      <nav className="ml-auto hidden lg:flex gap-16 items-center ">
+      <nav className="ml-auto hidden lg:flex gap-16 items-center mr-20">
         <Link
           className={`${
             isLinkActive("/app") ? "text-[#0CC0DF]" : "text-slate-50"

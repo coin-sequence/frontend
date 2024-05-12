@@ -47,7 +47,7 @@ function MountainIcon(props: any) {
   return (
     <div {...props}>
       <Image
-        src="/brandLogo.svg"
+        src="/brandLogo1.png"
         width={0}
         height={0}
         sizes="100vw"
