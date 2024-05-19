@@ -15,7 +15,7 @@ export function AppNavbar() {
     return pathname === path;
   };
   return (
-    <header className="flex w-full shrink-0 items-center px-4 md:px-6 mt-10 lg:mt-0">
+    <header className="container flex w-full shrink-0 items-center px-4 md:px-6 mt-10 lg:mt-0">
       <Sheet>
         <SheetTrigger asChild>
           <Button className="lg:hidden" size="icon" variant="outline">
