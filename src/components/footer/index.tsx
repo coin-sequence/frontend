@@ -30,7 +30,7 @@ export const Footer = () => {
       <Container>
         <Row className="flex flex-row items-center">
           <Col>
-            <MountainIcon className="h-36 w-36 flex mt-8" />
+            <MountainIcon className="h-28 w-28 flex mt-8" />
           </Col>
           <Col lg={2} className="flex gap-3 self-end pb-5">
             <BotIcon size={32} color="#ffffff" />

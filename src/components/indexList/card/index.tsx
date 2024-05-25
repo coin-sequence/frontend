@@ -11,15 +11,20 @@ interface IndexInfoProps {
   marketcap: number;
   name: string;
   image: string;
+  selected: boolean;
 }
 
-export function IndexCard({ image, marketcap, name, price }: IndexInfoProps) {
+export function IndexCard({ image, marketcap, name, price,selected }: IndexInfoProps) {
   return (
     <Card
       className={clsx("w-[350px] rounded-3xl mx-auto", {
-        "bg-[#B373ED] shadow-[6px_10px_20px_#81379380]": name === "PolyPulse 10",
+        "bg-[#B373ED] shadow-[6px_10px_20px_#81379380]":
+          name === "PolyPulse 10",
         "bg-[#54D23F] shadow-[6px_10px_20px_#2F7F2D80]": name === "Base MemeX",
         "bg-[#5875FC] shadow-[6px_10px_10px_#3C52B680]": name === "GFX",
+        "border-red border-4 hover:shadow-2xl": selected && name === "PolyPulse 10",
+        "border-green border-4 hover:shadow-2xl": selected && name === "Base MemeX",
+        "border-blue border-4 hover:shadow-2xl": selected && name === "GFX",
       })}
     >
       <CardContent className="flex flex-col py-3">
