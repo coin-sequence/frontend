@@ -6,29 +6,6 @@ import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
 const projectId = process.env.NEXT_PUBLIC_WEB3_PROJECT_ID || "PROJECT_ID";
 
 // 2. Set chains
-const mainnet = {
-  chainId: 1,
-  name: "Ethereum",
-  currency: "ETH",
-  explorerUrl: "https://etherscan.io",
-  rpcUrl: "https://cloudflare-eth.com",
-};
-
-const spolia = {
-  chainId: 11155111,
-  name: "Sepolia",
-  currency: "ETH",
-  explorerUrl: "https://sepolia.etherscan.io",
-  rpcUrl: "https://sepolia.drpc.org",
-};
-
-const goerli = {
-  chainId: 5,
-  name: "Goerli",
-  currency: "ETH",
-  explorerUrl: "https://goerli.etherscan.io/",
-  rpcUrl: "https://goerli.drpc.org",
-};
 
 const optimismSepolia = {
   chainId: 11155420,
@@ -54,7 +31,7 @@ const ethersConfig = defaultConfig({
 // 5. Create a Web3Modal instance
 createWeb3Modal({
   ethersConfig,
-  chains: [optimismSepolia, mainnet, spolia, goerli],
+  chains: [optimismSepolia],
   projectId,
   allWallets: "HIDE",
 });
