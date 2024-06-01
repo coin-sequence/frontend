@@ -27,36 +27,36 @@ const dummyTokenList = [
     label: "USDC",
     name: "USD Coin",
   },
-  {
-    value: "USDT",
-    label: "USDT",
-    name: "Tether",
-  },
-  {
-    value: "DAI",
-    label: "DAI",
-    name: "Dai Stablecoin",
-  },
-  {
-    value: "WBTC",
-    label: "WBTC",
-    name: "Wrapped Bitcoin",
-  },
-  {
-    value: "ETH",
-    label: "ETH",
-    name: "Ethereum",
-  },
-  {
-    value: "BTC",
-    label: "BTC",
-    name: "Bitcoin",
-  },
+  // {
+  //   value: "USDT",
+  //   label: "USDT",
+  //   name: "Tether",
+  // },
+  // {
+  //   value: "DAI",
+  //   label: "DAI",
+  //   name: "Dai Stablecoin",
+  // },
+  // {
+  //   value: "WBTC",
+  //   label: "WBTC",
+  //   name: "Wrapped Bitcoin",
+  // },
+  // {
+  //   value: "ETH",
+  //   label: "ETH",
+  //   name: "Ethereum",
+  // },
+  // {
+  //   value: "BTC",
+  //   label: "BTC",
+  //   name: "Bitcoin",
+  // },
 ];
 
 export function DepositCombobox() {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("BTC");
+  const [value, setValue] = React.useState("USDC");
 
   return (
     <div className="border-[1px] border-[#B3B3B3] rounded-xl">
@@ -91,7 +91,7 @@ export function DepositCombobox() {
                       key={token.value}
                       value={token.value}
                       onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue);
+                        setValue(currentValue);
                         setOpen(false);
                       }}
                     >
@@ -129,6 +129,8 @@ export function DepositCombobox() {
             className="bg-transparent rouw-[200px] nded-xl p-2 text-white font-bold text-xl outline-none border-none focus-visible:ring-transparent text-right w-full"
             autoCorrect="off"
             placeholder="0.0"
+            value={2.0}
+            disabled
             autoComplete="off"
           />
           {/* <p className="text-white font-bold text-xl m-0">USDC</p> */}

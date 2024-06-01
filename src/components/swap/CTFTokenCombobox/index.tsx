@@ -79,7 +79,7 @@ export function CTFTokenCombobox() {
                       key={token.value}
                       value={token.value}
                       onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue);
+                        setValue(currentValue);
                         const selectedToken = dummyTokenList.filter((token)=>token.value===currentValue)[0];
                         setName(selectedToken.name)
                         setOpen(false);

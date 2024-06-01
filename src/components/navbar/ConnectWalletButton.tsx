@@ -4,6 +4,7 @@ import {
   useWeb3Modal,
   useWeb3ModalAccount,
   useDisconnect,
+
 } from "@web3modal/ethers/react";
 import { truncateAddress } from "@/lib/utils";
 
@@ -16,9 +17,7 @@ export function ConnectWalletButton() {
 
   const handleConnectWallet = async () => {
     if (isConnected) {
-      await open({
-        view:"Account"
-      });
+      await open();
     } else {
       await open();
     }

@@ -30,6 +30,14 @@ const goerli = {
   rpcUrl: "https://goerli.drpc.org",
 };
 
+const optimismSepolia = {
+  chainId: 11155420,
+  name: "Optimism Sepolia",
+  currency: "ETH",
+  explorerUrl: "https://optimism-sepolia.etherscan.io/",
+  rpcUrl: "https://optimism-sepolia.drpc.org",
+};
+
 // 3. Create a metadata object
 const metadata = {
   name: "My Website",
@@ -40,15 +48,15 @@ const metadata = {
 // 4. Create Ethers config
 const ethersConfig = defaultConfig({
   metadata,
-  defaultChainId:11155111
+  defaultChainId: 11155111,
 });
 
 // 5. Create a Web3Modal instance
 createWeb3Modal({
   ethersConfig,
-  chains: [mainnet, spolia, goerli],
+  chains: [optimismSepolia, mainnet, spolia, goerli],
   projectId,
-  allWallets:"HIDE",
+  allWallets: "HIDE",
 });
 
 interface Web3ModalProps {

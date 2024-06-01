@@ -10,12 +10,12 @@ import { SwapFooter } from "@/components/swap/SwapFooter";
 export const WithdrawSwap = () => {
   return (
     <div className="flex flex-col justify-between gap-4">
-      <div>
+      {/* <div>
         <CTFTokenCombobox />
       </div>
       <div>
         <ArrowDownCircleIcon className="ml-2 h-8 w-8 shrink-0 opacity-50 text-white mx-auto" />
-      </div>
+      </div> */}
       <div>
         <DepositCombobox />
       </div>

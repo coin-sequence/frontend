@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Hind_Vadodara } from "next/font/google";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Web3Modal } from "@/providers/web3ModalProvider";
 
@@ -25,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={hindVadodara.className}>
+        <ToastContainer />
         <Web3Modal>{children}</Web3Modal>
       </body>
     </html>
