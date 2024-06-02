@@ -15,6 +15,17 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SwapFooter } from "@/components/swap/SwapFooter";
 import { ToastLink } from "@/components/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { USDCContract, CTFContract } from "@/utils/contracts";
 import { getContract } from "@/utils/util";
@@ -29,6 +40,7 @@ export const DepositSwap = () => {
 
   const [loading, setLoading] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
+  const [showDialog, setShowDialog] = useState(true);
 
   let firstToastShown = false;
 
@@ -38,6 +50,26 @@ export const DepositSwap = () => {
   const httpProvider = new ethers.JsonRpcProvider(
     "https://base-sepolia-rpc.publicnode.com/"
   );
+
+  const addTokenToWallet = async () => {
+    if (!walletProvider) return;
+
+    try {
+      await walletProvider.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20", // Initially only supports ERC20, but eventually more!
+          options: {
+            address: constants.CTF_ADDRESS, // The address that the token is at.
+            symbol: "CTF", // A ticker symbol or shorthand, up to 5 chars.
+          },
+        },
+      });
+    } catch (error) {
+    } finally {
+      setShowDialog(false);
+    }
+  };
 
   const getApproveStatus = async () => {
     if (!address || !walletProvider) return;
@@ -116,7 +148,7 @@ export const DepositSwap = () => {
             closeOnClick: true,
             closeButton: true,
           });
-
+          setShowDialog(true);
           toast.success("Deposit completed successfully");
         }
       }
@@ -236,6 +268,19 @@ export const DepositSwap = () => {
   };
   return (
     <div className="flex flex-col justify-between gap-4">
+      <AlertDialog onOpenChange={setShowDialog} open={showDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>CTF Minted Successfully</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex items-center">
+            <AlertDialogCancel className="m-0">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={addTokenToWallet}>
+              Add CTF to wallet
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div>
         <DepositCombobox />
       </div>
