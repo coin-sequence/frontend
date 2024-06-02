@@ -140,26 +140,31 @@ export const DepositSwap = () => {
       "CrossChainPoolManager__ReceiptSent",
       (originMessageId, receiptMessageId, receiptType) => {
         console.log("event2 ", originMessageId, receiptMessageId, receiptType);
-        if (originMessageId === msgId && toastId.current) {
+        if (originMessageId === msgId && toastId.current && toastId2.current) {
           toast.update(toastId.current, {
             type: "success",
             render: <ToastLink tx={msgId} />,
-            autoClose: false,
+            autoClose: 3000,
             closeOnClick: true,
             closeButton: true,
           });
-          setShowDialog(true);
-          toast.success("Deposit completed successfully");
+
+          toast.update(toastId2.current, {
+            type: "success",
+            render: <ToastLink tx={receiptMessageId} />,
+            autoClose: 3000,
+            closeOnClick: true,
+            closeButton: true,
+          });
         }
       }
     );
 
     ctfContract.on("CTF__Deposited", (user, amount) => {
       if (user === address && toastId2.current) {
-        toast.update(toastId2.current, {
-          render: "CTF minted successfully",
+        setShowDialog(true);
+        toast.success("CTF minted successfully", {
           autoClose: 3000,
-          type: "success",
         });
       }
     });
