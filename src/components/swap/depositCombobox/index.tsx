@@ -129,7 +129,7 @@ export function DepositCombobox() {
             className="bg-transparent rouw-[200px] nded-xl p-2 text-white font-bold text-xl outline-none border-none focus-visible:ring-transparent text-right w-full"
             autoCorrect="off"
             placeholder="0.0"
-            value={2.0}
+            value={4.0}
             disabled
             autoComplete="off"
           />

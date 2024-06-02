@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { toast, Id } from "react-toastify";
 import { ArrowDownCircleIcon } from "lucide-react";
 import {
@@ -22,11 +22,13 @@ import USDC_ABI from "@/abis/usdc_abi.json";
 import CTF_ABI from "@/abis/ctf_abi.json";
 import CROSS_CHAIN_ABI from "@/abis/cross_chain_pool_manager_abi.json";
 import * as constants from "@/utils/const";
-import { resolve } from "path";
 
 export const DepositSwap = () => {
   const { walletProvider } = useWeb3ModalProvider();
   const { address } = useWeb3ModalAccount();
+
+  const [loading, setLoading] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
 
   const toastId = useRef<null | Id>(null);
   const toastId2 = useRef<null | Id>(null);
@@ -34,6 +36,26 @@ export const DepositSwap = () => {
   const httpProvider = new ethers.JsonRpcProvider(
     "https://base-sepolia-rpc.publicnode.com/"
   );
+
+  const getApproveStatus = async () => {
+    if (!address || !walletProvider) return;
+    setLoading(true);
+    const usdcContract = await getContract(
+      constants.USDC_ADDRESS,
+      USDC_ABI,
+      walletProvider
+    );
+
+    const usdcContractInstance = new USDCContract(usdcContract);
+
+    const allowance = await usdcContractInstance.allowance(
+      address,
+      constants.CTF_ADDRESS
+    );
+
+    setIsApproved(parseInt(allowance) >= constants.DEPOSIT_USDC_ALLOWANCE);
+    setLoading(false);
+  };
 
   const listenForEvents = async () => {
     let msgId = "";
@@ -56,31 +78,58 @@ export const DepositSwap = () => {
         console.log("event 1", user, _messageId);
         if (user === address && msgId === "") {
           msgId = _messageId;
-          toastId2.current = toast(<ToastLink tx={msgId} />, {
-            autoClose: false,
+
+          const toastPromise = new Promise((resolve, reject) => {
+            crossChainContract.on(
+              "CrossChainPoolManager__ReceiptSent",
+              (originMessageId, receiptMessageId, receiptType) => {
+                console.log("event 2", originMessageId, receiptMessageId);
+                if (originMessageId === msgId && toastId2.current) {
+                  resolve("Deposit completed");
+                }
+              }
+            );
+          });
+
+          // toastId2.current = toast(<ToastLink tx={msgId} />, {
+          //   autoClose: false,
+          // });
+
+          toast.promise(toastPromise, {
+            pending: {
+              render: <ToastLink tx={msgId} />,
+            },
+            success: {
+              render: "Deposit completed",
+              autoClose: 3000,
+            },
+            error: {
+              render: "Failed to deposit",
+              autoClose: 3000,
+            },
           });
         }
       }
     );
 
-    crossChainContract.on(
-      "CrossChainPoolManager__ReceiptSent",
-      (originMessageId, receiptMessageId, receiptType) => {
-        console.log("event 2", originMessageId, receiptMessageId);
-        if (originMessageId === msgId && toastId2.current) {
-          toast.update(toastId2.current, {
-            type: "success",
-            render: "Deposit completed",
-            autoClose: 3000,
-          });
-        }
-      }
-    );
+    // crossChainContract.on(
+    //   "CrossChainPoolManager__ReceiptSent",
+    //   (originMessageId, receiptMessageId, receiptType) => {
+    //     console.log("event 2", originMessageId, receiptMessageId);
+    //     if (originMessageId === msgId && toastId2.current) {
+    //       toast.update(toastId2.current, {
+    //         type: "success",
+    //         render: "Deposit completed",
+    //         autoClose: 3000,
+    //       });
+    //     }
+    //   }
+    // );
   };
 
   useEffect(() => {
     if (!address) return;
-
+    getApproveStatus();
     listenForEvents();
   }, [address]);
 
@@ -89,6 +138,7 @@ export const DepositSwap = () => {
       toast.error("Please connect your wallet");
       return;
     }
+    setLoading(true);
     toastId.current = toast("getting USDC allowance...", {
       autoClose: false,
     });
@@ -141,6 +191,7 @@ export const DepositSwap = () => {
           render: "Failed to approve USDC",
           autoClose: 3000,
         });
+        setLoading(false);
       }
     } else {
       toast.update(toastId.current, {
@@ -172,6 +223,7 @@ export const DepositSwap = () => {
         render: "Failed to deposit",
         autoClose: 3000,
       });
+      setLoading(false);
     }
 
     return;
@@ -191,8 +243,9 @@ export const DepositSwap = () => {
         <Button
           className="w-full bg-[#30B7DFB0] text-2xl py-6 rounded-xl"
           onClick={onClick}
+          disabled={loading}
         >
-          Approve
+          {loading ? "Loading..." : isApproved ? "Deposit" : "Approve USDC"}
         </Button>
       </div>
       <Separator className="bg-[#7F7F7F99] opacity-60" />
