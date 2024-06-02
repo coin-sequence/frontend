@@ -30,6 +30,8 @@ export const DepositSwap = () => {
   const [loading, setLoading] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
 
+  let firstToastShown = false;
+
   const toastId = useRef<null | Id>(null);
   const toastId2 = useRef<null | Id>(null);
 
@@ -75,15 +77,13 @@ export const DepositSwap = () => {
     ctfContract.on(
       "PoolManager__CrossChainDepositRequested",
       (depositId, chainId, user, _messageId, usdcAmount) => {
-        console.log("event 1", user, _messageId);
-        if (user === address && msgId === "") {
+        if (user === address && msgId === "" && firstToastShown === false) {
           msgId = _messageId;
-
+          firstToastShown = true;
           const toastPromise = new Promise((resolve, reject) => {
             crossChainContract.on(
               "CrossChainPoolManager__ReceiptSent",
               (originMessageId, receiptMessageId, receiptType) => {
-                console.log("event 2", originMessageId, receiptMessageId);
                 if (originMessageId === msgId && toastId2.current) {
                   resolve("Deposit completed");
                 }
@@ -91,9 +91,17 @@ export const DepositSwap = () => {
             );
           });
 
-          // toastId2.current = toast(<ToastLink tx={msgId} />, {
-          //   autoClose: false,
-          // });
+
+          const toastPromise2 = new Promise((resolve, reject) => {
+            crossChainContract.on(
+              "CrossChainPoolManager__ReceiptSent",
+              (originMessageId, receiptMessageId, receiptType) => {
+                if (originMessageId === msgId && toastId2.current) {
+                  resolve("Deposit completed");
+                }
+              }
+            );
+          });
 
           toast.promise(toastPromise, {
             pending: {
@@ -108,23 +116,24 @@ export const DepositSwap = () => {
               autoClose: 3000,
             },
           });
+
+          toast.promise(toastPromise2, {
+            pending: {
+              render: "Waiting for deposit to complete...",
+              autoClose: false,
+            },
+            success: {
+              render: "CTF transferred to your wallet",
+              autoClose: 3000,
+            },
+            error: {
+              render: "Failed to transfer CTF to your wallet",
+              autoClose: 3000,
+            },
+          });
         }
       }
     );
-
-    // crossChainContract.on(
-    //   "CrossChainPoolManager__ReceiptSent",
-    //   (originMessageId, receiptMessageId, receiptType) => {
-    //     console.log("event 2", originMessageId, receiptMessageId);
-    //     if (originMessageId === msgId && toastId2.current) {
-    //       toast.update(toastId2.current, {
-    //         type: "success",
-    //         render: "Deposit completed",
-    //         autoClose: 3000,
-    //       });
-    //     }
-    //   }
-    // );
   };
 
   useEffect(() => {

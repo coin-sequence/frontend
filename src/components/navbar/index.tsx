@@ -48,14 +48,14 @@ export function AppNavbar() {
         <MountainIcon className="h-28 w-28 flex" />
       </Link>
       <nav className="ml-auto hidden lg:flex gap-16 items-center mr-20">
-        <Link
+        {/* <Link
           className={`${
             isLinkActive("/app") ? "text-[#0CC0DF]" : "text-slate-50"
           } no-underline hover:text-cyan-600 font-bold`}
           href="/app"
         >
           Indexes
-        </Link>
+        </Link> */}
         <Link
           className={`${
             isLinkActive("/app/deposit") ? "text-[#0CC0DF]" : "text-slate-50"
