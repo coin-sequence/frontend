@@ -77,59 +77,49 @@ export const DepositSwap = () => {
     ctfContract.on(
       "PoolManager__CrossChainDepositRequested",
       (depositId, chainId, user, _messageId, usdcAmount) => {
+        console.log(
+          "event1 ",
+          depositId,
+          chainId,
+          user,
+          _messageId,
+          usdcAmount
+        );
         if (user === address && msgId === "" && firstToastShown === false) {
           msgId = _messageId;
           firstToastShown = true;
-          const toastPromise = new Promise((resolve, reject) => {
-            crossChainContract.on(
-              "CrossChainPoolManager__ReceiptSent",
-              (originMessageId, receiptMessageId, receiptType) => {
-                if (originMessageId === msgId && toastId2.current) {
-                  resolve("Deposit completed");
-                }
-              }
-            );
+
+          toastId.current = toast(<ToastLink tx={msgId} />, {
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: false,
+          
           });
 
+          toastId2.current = toast("Waiting for deposit to complete...", {
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: false,
+          });
+        }
+      }
+    );
 
-          const toastPromise2 = new Promise((resolve, reject) => {
-            crossChainContract.on(
-              "CrossChainPoolManager__ReceiptSent",
-              (originMessageId, receiptMessageId, receiptType) => {
-                if (originMessageId === msgId && toastId2.current) {
-                  resolve("Deposit completed");
-                }
-              }
-            );
+    crossChainContract.on(
+      "CrossChainPoolManager__ReceiptSent",
+      (originMessageId, receiptMessageId, receiptType) => {
+        console.log("event2 ", originMessageId, receiptMessageId, receiptType);
+        if (originMessageId === msgId && toastId.current && toastId2.current) {
+          toast.update(toastId.current, {
+            type: "success",
+            render: "Deposit completed",
+            autoClose: 3000,
           });
 
-          toast.promise(toastPromise, {
-            pending: {
-              render: <ToastLink tx={msgId} />,
-            },
-            success: {
-              render: "Deposit completed",
-              autoClose: 3000,
-            },
-            error: {
-              render: "Failed to deposit",
-              autoClose: 3000,
-            },
-          });
-
-          toast.promise(toastPromise2, {
-            pending: {
-              render: "Waiting for deposit to complete...",
-              autoClose: false,
-            },
-            success: {
-              render: "CTF transferred to your wallet",
-              autoClose: 3000,
-            },
-            error: {
-              render: "Failed to transfer CTF to your wallet",
-              autoClose: 3000,
-            },
+          toast.update(toastId2.current, {
+            render: "CTF minted successfully",
+            autoClose: 3000,
+            type: "success",
           });
         }
       }
