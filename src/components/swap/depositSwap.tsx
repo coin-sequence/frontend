@@ -93,7 +93,6 @@ export const DepositSwap = () => {
             autoClose: false,
             closeOnClick: false,
             closeButton: false,
-          
           });
 
           toastId2.current = toast("Waiting for deposit to complete...", {
@@ -109,21 +108,29 @@ export const DepositSwap = () => {
       "CrossChainPoolManager__ReceiptSent",
       (originMessageId, receiptMessageId, receiptType) => {
         console.log("event2 ", originMessageId, receiptMessageId, receiptType);
-        if (originMessageId === msgId && toastId.current && toastId2.current) {
+        if (originMessageId === msgId && toastId.current) {
           toast.update(toastId.current, {
             type: "success",
-            render: "Deposit completed",
-            autoClose: 3000,
+            render: <ToastLink tx={msgId} />,
+            autoClose: false,
+            closeOnClick: true,
+            closeButton: true,
           });
 
-          toast.update(toastId2.current, {
-            render: "CTF minted successfully",
-            autoClose: 3000,
-            type: "success",
-          });
+          toast.success("Deposit completed successfully");
         }
       }
     );
+
+    ctfContract.on("CTF__Deposited", (user, amount) => {
+      if (user === address && toastId2.current) {
+        toast.update(toastId2.current, {
+          render: "CTF minted successfully",
+          autoClose: 3000,
+          type: "success",
+        });
+      }
+    });
   };
 
   useEffect(() => {
