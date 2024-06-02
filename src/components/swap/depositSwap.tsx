@@ -150,11 +150,11 @@ export const DepositSwap = () => {
           });
 
           toast.update(toastId2.current, {
-            type: "success",
+            type: "default",
             render: <ToastLink tx={receiptMessageId} />,
-            autoClose: 3000,
-            closeOnClick: true,
-            closeButton: true,
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: false,
           });
         }
       }
@@ -163,6 +163,10 @@ export const DepositSwap = () => {
     ctfContract.on("CTF__Deposited", (user, amount) => {
       if (user === address && toastId2.current) {
         setShowDialog(true);
+        toast.update(toastId2.current, {
+          type: "success",
+          autoClose: 3000,
+        });
         toast.success("CTF minted successfully", {
           autoClose: 3000,
         });
