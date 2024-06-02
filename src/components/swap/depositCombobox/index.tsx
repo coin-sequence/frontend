@@ -67,7 +67,7 @@ export function DepositCombobox() {
               <div className="w-[40px]">
                 <AspectRatio ratio={1 / 1}>
                   <Image
-                    src={"/gfx.png"}
+                    src={"/usdc.png"}
                     alt="Image"
                     layout="fill"
                     className="rounded-md object-cover"
@@ -99,7 +99,7 @@ export function DepositCombobox() {
                         <div className="w-[40px]">
                           <AspectRatio ratio={1 / 1}>
                             <Image
-                              src={"/gfx.png"}
+                              src={"/usdc.png"}
                               alt="Image"
                               layout="fill"
                               className="rounded-md object-cover"
