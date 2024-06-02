@@ -40,7 +40,7 @@ export const DepositSwap = () => {
 
   const [loading, setLoading] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
 
   let firstToastShown = false;
 
